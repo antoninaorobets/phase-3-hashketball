@@ -1,4 +1,5 @@
 # Write your code below game_hash
+require 'pry'
 def game_hash
   {
     home: {
@@ -126,4 +127,94 @@ def game_hash
   }
 end
 
-# Write code here
+
+def all_players 
+  players =[]
+  game_hash.each do |location, data|
+     data.each do |attribute, info|
+       if attribute == :players
+        info.each do |record|
+          players << record
+        end
+       end
+     end
+  end
+  players
+end
+
+ 
+
+ def num_points_scored team_name
+  players = all_players
+  players.each do |player|
+     if player[:player_name] == team_name
+       return player[:points]
+     end 
+  end
+ end
+
+ def shoe_size team_name
+  players = all_players
+  players.each do |player|
+    if player[:player_name] == team_name
+      return player[:shoe]
+    end 
+  end
+ end
+
+ def team_colors team_name
+  game_hash.each do |location, data|
+    if data[:team_name] == team_name
+      return data[:colors]
+    end
+  end
+ end
+
+ def team_names
+  teams =[]
+  game_hash.each do |location, data|
+       teams << data[:team_name] 
+  end
+  teams
+ end
+
+
+
+ def player_numbers team_name
+  array =[]
+  game_hash.each do |location, data|
+       if data[:team_name] == team_name
+        data[:players].each do |players|
+           players.each do |key, value|
+            if  key == :number
+              array << value
+            end
+           end
+        end
+       end
+  end
+  array
+end
+
+
+
+def player_stats player_name
+   all_players.each do |player| 
+      if player[:player_name] == player_name
+       return player
+      end   
+  end
+end
+
+def big_shoe_rebounds
+  max_shoe= all_players.reduce(0) {|m, player| [m, player[:shoe]].max()}
+  all_players.find {|player| player[:shoe] == max_shoe}[:rebounds]
+
+end
+
+#  shoe_size("Kemba Walker")
+# team_names
+# team_colors("Brooklyn Nets")
+# player_numbers ("Brooklyn Nets")
+# player_stats("Alan Anderson")
+big_shoe_rebounds
